@@ -16,9 +16,10 @@ public class AccountPage extends Page{
         ScrollManager.scrollToElement(logOutBtn);
         logOutBtn.click();
         System.out.println("The logOut button was clicked");
-
-
     }
 
+public boolean isLogoutButtonDisplayed(){
+      return  logOutBtn.isDisplayed();
+}
 
 }
