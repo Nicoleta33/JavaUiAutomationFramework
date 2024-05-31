@@ -1,65 +1,41 @@
 package online.tekwillacademyopencart;
-
 import online.tekwillacademy.managers.DataGeneratorManager;
 import online.tekwillacademy.managers.DriverManager;
-import online.tekwillacademy.managers.ScrollManager;
-import org.openqa.selenium.By;
+import online.tekwillacademy.pageobjects.AccountPage;
+import online.tekwillacademy.pageobjects.HomePage;
+import online.tekwillacademy.pageobjects.LoginPage;
+import online.tekwillacademy.pageobjects.RegisterPage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WindowType;
+
 
 public class TestRunner {
     public static void main(String[] args) throws InterruptedException {
         WebDriver driver = DriverManager.getInstance().getDriver();
-
-
-        String currentTabName= driver.getWindowHandle();
-        Thread.sleep(5000);
-        driver.switchTo().newWindow(WindowType.TAB);
-
-
         driver.get("https://tekwillacademy-opencart.online/");
-        System.out.println("The current URL is: " + driver.getCurrentUrl());
-        System.out.println("The current page title " + driver.getTitle());
 
-        WebElement  userDropDownIcon= driver.findElement(By.xpath("//i[@class='fa-solid fa-user']"));
-        userDropDownIcon.click();
-        WebElement registerOption = driver.findElement(By.xpath("//a[normalize-space()='Register']"));
-        registerOption.click();
+        HomePage homePage = new HomePage(driver);
+        homePage.navigateToRegisterPage();
+        RegisterPage registerPage = new RegisterPage(driver);
+        String randomEmail = DataGeneratorManager.getRandomEmail();
+        registerPage.clickOnContiuneButton();
+        registerPage.completeTheRegisterForm(("Sun"), "Sunshine" , randomEmail,"Mia123!");
+        registerPage.enablePrivacyToggle();
+        registerPage.clickOnContiuneButton();
 
-
-        System.out.println("The current URL is: " + driver.getCurrentUrl());
-        System.out.println("The current page title " + driver.getTitle());
-
-        WebElement firstNameInput = driver.findElement(By.id("input-firstname"));
-        firstNameInput.sendKeys("Sun");
-        WebElement lastNameInput = driver.findElement(By.id("input-lastname"));
-        lastNameInput.sendKeys("Sunshise");
-        WebElement email = driver.findElement(By.id("input-email"));
-        String emaiData = DataGeneratorManager.getRandomEmail();
-        email.sendKeys(emaiData);
-        System.out.println("Email: " + emaiData);
-        WebElement inputPassword =driver.findElement(By.id("input-password"));
-        String password = DataGeneratorManager.getRandomPassword(10,15);
-        inputPassword.sendKeys(password);
-        System.out.println("Password: " + password);
-        WebElement privacyToggle = driver.findElement(By.cssSelector("input[value='1'][name='agree']"));
-        ScrollManager.scrollToElement(privacyToggle);
-        privacyToggle.click();
-
-        WebElement continueButton = driver.findElement(By.cssSelector("button[type='submit']"));
-        continueButton.click();
-
-        System.out.println("The current URL is: " + driver.getCurrentUrl());
-        System.out.println("The current page title " + driver.getTitle());
+        Thread.sleep(2000);
 
 
 
+        AccountPage accountPage = new AccountPage(driver);
+        accountPage.clickOnLogoutButton();
+        homePage.navigateTotheLoginPage();
 
-        driver.close();
+        LoginPage loginPage=new LoginPage(driver);
+        loginPage.completeTheLoginForm(randomEmail,"Mia123!");
+        loginPage.clickOnContinueButton();
 
-        driver.switchTo().window(currentTabName);
-        driver.get("https://tekwillacademy-opencart.online/");
+        Thread.sleep(3000);
+
         driver.quit();
         System.out.println("The test is finished and the driver is closed");
 
