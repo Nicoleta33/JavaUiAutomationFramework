@@ -18,6 +18,7 @@ public class DriverManager {
         switch (webDriverType.toUpperCase()) {
             case "CHROME":
                 driver = new ChromeDriver();
+                driver.manage().window().maximize();
                 System.out.println("The Chrome Driver was initiated");
                 break;
             case "FIREFOX":
@@ -37,6 +38,7 @@ public class DriverManager {
 
         }
 
+        driver.manage().window().maximize();
     }
 
     public static DriverManager getInstance(){
